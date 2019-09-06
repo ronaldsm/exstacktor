@@ -3,21 +3,16 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "exstacktor/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "exstacktor"
+  spec.name          = 'exstacktor'
   spec.version       = Exstacktor::VERSION
-  spec.authors       = ["ronaldsm"]
-  spec.email         = ["ronaldsm@cisco.com"]
+  spec.authors       = ['ronaldsm']
+  spec.email         = ['ronaldsm@cisco.com']
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.summary       = %q{Parse out the data that you're interested in from a stacktrace}
+  spec.description   = %q{Given a stacktrace, parse it to output only the pieces you care about for further analysis/reporting}
+  spec.homepage      = 'https://github.com/ronaldsm/exstacktor'
+  spec.license       = 'MIT'
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
-
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -29,6 +24,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.0"
+  spec.add_development_dependency 'pry-byebug', '~> 3.4'
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+
 end
