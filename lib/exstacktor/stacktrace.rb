@@ -4,9 +4,11 @@ module Exstacktor
     attr_reader :parsed_stack
     attr_accessor :exclude
     attr_accessor :include
+    attr_accessor :ruleset
     attr_writer :clean_keep
 
-    def initialize(exclude: nil, include: nil)
+    def initialize(ruleset: nil, exclude: nil, include: nil)
+      @ruleset = ruleset
       @raw_stack = nil
       @parsed_stack = nil
       @exclude = exclude
@@ -14,7 +16,37 @@ module Exstacktor
       @remove = nil
     end
 
+
     def parse(stacktrace)
+      @raw_stack = stacktrace
+      @parsed_stack = []
+      @raw_stack.each do |line|
+        if keep?(line)
+          modified_line = modify_line(line)
+          @parsed_stack << modified_line
+        end
+      end
+      @parsed_stack
+    end
+
+    def keep?(line)
+      return false if @ruleset.nil?
+
+      @ruleset.rules.each do |rule|
+        match = line.match(rule.regex)
+        # require 'pry-byebug';binding.pry
+        exclude = match && @ruleset.ruleset_type == :exclude
+        include = match && @ruleset.ruleset_type == :include
+        return false if exclude
+        return true if include
+      end
+
+
+      # require 'pry-byebug';binding.pry
+      false
+    end
+
+    def parse_old(stacktrace)
       @raw_stack = stacktrace
       @parsed_stack = []
       @raw_stack.each do |line|
@@ -58,13 +90,6 @@ module Exstacktor
         m = line.match r
         line = m[1] unless m.nil?
       end
-
-      #method/line
-      # m = line.match(/^.*(\/\w+:\d+):.*/)
-      # line = m[1] unless m.nil?
-      # /api_vulnerabilities_filters_spec.rb:62:in
-
-
       line
     end
   end
