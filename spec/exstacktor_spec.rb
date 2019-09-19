@@ -37,6 +37,17 @@ RSpec.describe Exstacktor do
     stack = Exstacktor::Stacktrace.new(ruleset: ruleset)
     parsed = stack.parse stacktrace2
     expect(parsed.count).to eq 2
+    expect(parsed[0]).to eq 'abc def'
+    expect(parsed[1]).to eq 'abc jkl'
+  end
+
+  it 'can handle multiple exceptions to an include rule' do
+    rule_with_exception = Exstacktor::Rules.new(/abc/, [/ghi/,/def/])
+    ruleset = Exstacktor::Ruleset.new([rule_with_exception], :include)
+    stack = Exstacktor::Stacktrace.new(ruleset: ruleset)
+    parsed = stack.parse stacktrace2
+    expect(parsed.count).to eq 1
+    expect(parsed[0]).to eq 'abc jkl'
   end
 
   xit 'can exclude lines based on a rule' do
